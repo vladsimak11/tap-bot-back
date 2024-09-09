@@ -20,6 +20,11 @@ const bot = new TelegramBot(API_TOKEN, { polling: true });
 
 app.use(cors());
 
+// Додаємо маршрут для кореневого шляху
+app.get('/', (req, res) => {
+    res.send('Bot is running successfully!');
+});
+
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
