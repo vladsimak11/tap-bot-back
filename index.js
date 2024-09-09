@@ -20,6 +20,10 @@ const bot = new TelegramBot(API_TOKEN, { polling: true });
 
 app.use(cors());
 
+bot.on('message', (msg) => {
+    console.log('Received message:', msg);
+});
+
 // Додаємо маршрут для кореневого шляху
 app.get('/', (req, res) => {
     res.send('Bot is running successfully!');
@@ -27,6 +31,7 @@ app.get('/', (req, res) => {
 
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
+    console.log('Received /start command:', msg);
     const chatId = msg.chat.id;
     const webAppUrl = 'https://tap-bot-front.vercel.app/'; // Замініть на URL вашого веб-додатку
 
