@@ -15,7 +15,7 @@ app.use(cors());
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    const webAppUrl = 'http://localhost:1111/'; // Замініть на URL вашого веб-додатку
+    const webAppUrl = 'https://tap-bot-front.vercel.app/'; // Замініть на URL вашого веб-додатку
 
     bot.sendMessage(chatId, `${msg.chat.username}! Ласкаво просимо до Tap Bucket! Натисніть на кнопку нижче, щоб запустити гру.`, {
         reply_markup: {
