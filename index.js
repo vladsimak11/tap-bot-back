@@ -14,7 +14,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const { API_TOKEN, PORT } = process.env;
+const { API_TOKEN} = process.env;
 
 const bot = new TelegramBot(API_TOKEN, { polling: true });
 
@@ -34,6 +34,6 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(() => {
+    console.log('Server is running');
 });
