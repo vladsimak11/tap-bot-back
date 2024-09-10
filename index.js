@@ -41,6 +41,7 @@ app.post(`/bot${API_TOKEN}`, (req, res) => {
 });
 
 
-app.listen(() => {
-    console.log('Server is running');
+const PORT = process.env.PORT || 1111; // Можете вказати будь-який порт або залишити 3000
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
