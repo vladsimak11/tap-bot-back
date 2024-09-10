@@ -6,24 +6,15 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-
-const { API_TOKEN} = process.env;
-
-const bot = new TelegramBot(API_TOKEN, { polling: true });
-
+app.use(express.json());
 app.use(cors());
 
-// Додаємо маршрут для кореневого шляху
-app.get('/', (req, res) => {
-    res.send('Bot is running successfully!');
-});
+const { API_TOKEN, SERVER_URL} = process.env;
+
+const bot = new TelegramBot(API_TOKEN, { webHook: true });
+
+bot.setWebHook(`${SERVER_URL}/bot${API_TOKEN}`);
+
 
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
@@ -43,6 +34,16 @@ bot.onText(/\/start/, (msg) => {
     }).catch((error) => {
         console.log('Error sending message:', error);
     });
+});
+
+app.post(`/bot${API_TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+});
+
+// Додаємо маршрут для кореневого шляху
+app.get('/', (req, res) => {
+    res.send('Bot is running successfully!');
 });
 
 app.listen(() => {
