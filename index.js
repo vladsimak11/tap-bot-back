@@ -9,6 +9,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Додаємо маршрут для кореневого шляху
+app.get('/', (req, res) => {
+    res.send('Bot is running successfully!');
+});
+
 const { API_TOKEN, SERVER_URL} = process.env;
 
 const bot = new TelegramBot(API_TOKEN, { webHook: true });
@@ -21,18 +26,12 @@ bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const webAppUrl = 'https://tap-bot-front.vercel.app/'; // Замініть на URL вашого веб-додатку
 
-    console.log('Sending message to Vercel:', chatId);
-
     bot.sendMessage(chatId, `${msg.chat.first_name}! Ласкаво просимо до Tap Bucket! Натисніть на кнопку нижче, щоб запустити гру.`, {
         reply_markup: {
             inline_keyboard: [
                 [{ text: 'Запустити гру', web_app: { url: webAppUrl } }]
             ]
         }
-    }).then(() => {
-        console.log('Message sent successfully');
-    }).catch((error) => {
-        console.log('Error sending message:', error);
     });
 });
 
@@ -41,10 +40,6 @@ app.post(`/bot${API_TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
-// Додаємо маршрут для кореневого шляху
-app.get('/', (req, res) => {
-    res.send('Bot is running successfully!');
-});
 
 app.listen(() => {
     console.log('Server is running');
