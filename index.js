@@ -18,18 +18,25 @@ const { API_TOKEN, SERVER_URL} = process.env;
 
 const bot = new TelegramBot(API_TOKEN, { webHook: true });
 
+// Функція для затримки
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const PORT = process.env.PORT || 1111;
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
 
-    bot.setWebHook(`${SERVER_URL}/bot${API_TOKEN}`)
-    .then(() => {
+    try {
+        await bot.setWebHook(`${SERVER_URL}/bot${API_TOKEN}`);
         console.log('WebHook встановлено успішно');
-    })
-    .catch(err => {
+
+        // Затримка перед обробкою команд
+        await delay(1500); // Затримка 1.5 секунди
+        console.log('Затримка завершена. Бот готовий обробляти команди.');
+
+    } catch (err) {
         console.error('Помилка встановлення WebHook:', err);
-     });
+    }
 });
 
 // Обробка команди /start
