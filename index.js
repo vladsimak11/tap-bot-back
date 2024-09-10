@@ -14,12 +14,14 @@ app.get('/', (req, res) => {
     res.send('Bot is running successfully!');
 });
 
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 const { API_TOKEN, SERVER_URL} = process.env;
 
 const bot = new TelegramBot(API_TOKEN, { webHook: true });
-
-bot.setWebHook(`${SERVER_URL}/bot${API_TOKEN}`);
-
 
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
@@ -36,12 +38,25 @@ bot.onText(/\/start/, (msg) => {
 });
 
 app.post(`/bot${API_TOKEN}`, (req, res) => {
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
+    try {
+        bot.processUpdate(req.body);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Помилка обробки оновлення:', error);
+        res.sendStatus(500);
+    }
 });
 
 
 const PORT = process.env.PORT || 1111; // Можете вказати будь-який порт або залишити 3000
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+
+    bot.setWebHook(`${SERVER_URL}/bot${API_TOKEN}`)
+    .then(() => {
+        console.log('WebHook встановлено успішно');
+    })
+    .catch(err => {
+        console.error('Помилка встановлення WebHook:', err);
+     });
 });
