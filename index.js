@@ -42,7 +42,7 @@ app.listen(PORT, async () => {
 // Обробка команди /start
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    const webAppUrl = 'https://tap-bot-front.vercel.app/'; // Замініть на URL вашого веб-додатку
+    const webAppUrl = 'https://test-react-gilt-two.vercel.app/'; // Замініть на URL вашого веб-додатку
 
     bot.sendMessage(chatId, `${msg.chat.first_name}! Ласкаво просимо до Tap Bucket! Натисніть на кнопку нижче, щоб запустити гру.`, {
         reply_markup: {
